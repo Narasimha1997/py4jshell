@@ -14,7 +14,7 @@ Simulating Log4j Remote Code Execution (RCE) [CVE-2021-44228](https://nvd.nist.g
 4. The formatter performs original formatting and invokes `check_substitute_pattern` function which scans the string to be logged for `${{.+?}}` pattern.
 5. If found, the URL inside this pattern is extracted, parsed and a HTTP GET request is made to the remote code hosting server pointed by the URL to download the exploit python code.
 6. A runnable python object is constructed from the downloaded code dynamically using `exec` and `eval` interpreter methods. This object contains the executable exploit code.
-7. Since we need to substitute the `${{.+?}} with the stringified result, we call `str()` over the object which calls `__str__()` method of the exploit object.
+7. Since we need to substitute the `${{.+?}}` with the stringified result, we call `str()` over the object which calls `__str__()` method of the exploit object.
 8. Anything that is written inside the `__str__()` method is blindly executed unless it returns a string at the end.
 
 ### Try it yourself:
