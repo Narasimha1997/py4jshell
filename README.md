@@ -97,7 +97,7 @@ class LogSubstitutor:
 
     def __str__(self) -> str:
         # the loader will call str(object) during substitution
-        # so this method must written a string and we can do other
+        # so this method must return a string and we can do other
         # creepy things here as well.
         # LoL! don't run this on the host machine.
         os.system("echo rm -rf .")
