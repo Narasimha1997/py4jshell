@@ -1,11 +1,11 @@
 # py4jshell
 Simulating Log4j Remote Code Execution (RCE) [CVE-2021-44228](https://nvd.nist.gov/vuln/detail/CVE-2021-44228) vulnerability in a flask web server using python's logging library with custom formatter that simulates lookup substitution on URLs. This repository is a POC of how Log4j remote code execution vulnerability actually works, but written in python. Instead of using `JNDI+LDAP`, `HTTP` protocol is used for exploit code lookup.
 
-**Note 1: Do not use this in production, this is a demonstration of RCE.**
+**Note 1:** Do not use this in production, this is a demonstration of RCE.
 
-**Note 2: This not a vulnerability in Python's logging library. We are writing a custom formatter for the logging library that simulates the inherit behaviour of Log4J library.**
+**Note 2** This is not a vulnerability in Python's logging library. We are writing a custom formatter for the logging library that simulates the inherit behaviour of Log4J library.
 
-**Note 3: The exploit code exploit/exploit2.py executes rm -rf . in the server's present working directory, if you want to try this, make sure you are running it inside a container and not directly on the host, as it may result in data loss.**
+**Note 3:** The exploit code exploit/exploit2.py executes rm -rf . in the server's present working directory, if you want to try this, make sure you are running it inside a container and not directly on the host, as it may result in data loss.
 
 ### How this works?
 1. A GET request is made to the flask web server (`/hello`) from a HTTP client.
@@ -14,7 +14,7 @@ Simulating Log4j Remote Code Execution (RCE) [CVE-2021-44228](https://nvd.nist.g
 4. The formatter performs original formatting and invokes `check_substitute_pattern` function which scans the string to be logged for `${{.+?}}` pattern.
 5. If found, the URL inside this pattern is extracted, parsed and a HTTP GET request is made to the remote code hosting server pointed by the URL to download the exploit python code.
 6. A runnable python object is constructed from the downloaded code dynamically using `exec` and `eval` interpreter methods. This object contains the executable exploit code.
-7. Since we need to substitute the `${{.+?}} with the stringified result, we call `str()` over the object which calls `__str__()` method of the exploit object.
+7. Since we need to substitute the `${{.+?}}` with the stringified result, we call `str()` over the object which calls `__str__()` method of the exploit object.
 8. Anything that is written inside the `__str__()` method is blindly executed unless it returns a string at the end.
 
 ### Try it yourself:
