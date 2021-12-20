@@ -5,7 +5,7 @@ Simulating Log4j Remote Code Execution (RCE) [CVE-2021-44228](https://nvd.nist.g
 
 **Note 2** This is not a vulnerability in Python's logging library. We are writing a custom formatter for the logging library that simulates the inherit behaviour of Log4J library.
 
-**Note 3:** The exploit code exploit/exploit2.py executes rm -rf . in the server's present working directory, if you want to try this, make sure you are running it inside a container and not directly on the host, as it may result in data loss.
+**Note 3:** The exploit code exploit/exploit2.py executes `rm -rf *` in the server's present working directory, if you want to try this, make sure you are running it inside a container and not directly on the host, as it may result in data loss.
 
 ### How this works?
 1. A GET request is made to the flask web server (`/hello`) from a HTTP client.
@@ -42,7 +42,7 @@ docker run --rm -p 5000:5000 py4jshell
 ```
 The container should start the web server, you should see the following message:
 ```
-* Serving Flask app 'app' (lazy loading)
+ * Serving Flask app 'app' (lazy loading)
  * Environment: production
    WARNING: This is a development server. Do not use it in a production deployment.
    Use a production WSGI server instead.
